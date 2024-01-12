@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcfdac13336cu"]
+
+[ext_resource type="Script" path="res://scripts/BoardTile.cs" id="1_tlpk7"]
+
+[node name="BoardTile" type="ColorRect"]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 64.0
+offset_bottom = 64.0
+script = ExtResource("1_tlpk7")

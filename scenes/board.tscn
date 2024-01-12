@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://2sj52i8tgqe7"]
+
+[ext_resource type="Script" path="res://scripts/Board.cs" id="1_7lcc6"]
+[ext_resource type="PackedScene" uid="uid://dcfdac13336cu" path="res://scenes/boardTile.tscn" id="2_u26hx"]
+
+[node name="Board" type="GridContainer"]
+anchors_preset = -1
+anchor_right = 0.444
+anchor_bottom = 0.79
+offset_right = 0.511963
+offset_bottom = 0.0799866
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 8
+script = ExtResource("1_7lcc6")
+BoardTileScene = ExtResource("2_u26hx")
