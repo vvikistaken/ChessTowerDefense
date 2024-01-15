@@ -1,16 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://2sj52i8tgqe7"]
+[gd_scene load_steps=4 format=3 uid="uid://2sj52i8tgqe7"]
 
 [ext_resource type="Script" path="res://scripts/Board.cs" id="1_7lcc6"]
 [ext_resource type="PackedScene" uid="uid://dcfdac13336cu" path="res://scenes/boardTile.tscn" id="2_u26hx"]
+[ext_resource type="PackedScene" uid="uid://qynxq6oa8wj3" path="res://scenes/chessPiece.tscn" id="3_trku4"]
 
 [node name="Board" type="GridContainer"]
-anchors_preset = -1
-anchor_right = 0.444
-anchor_bottom = 0.79
-offset_right = 0.511963
-offset_bottom = 0.0799866
+custom_minimum_size = Vector2(512, 512)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = -256.0
+offset_right = 256.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 8
 script = ExtResource("1_7lcc6")
 BoardTileScene = ExtResource("2_u26hx")
+ChessPieceScene = ExtResource("3_trku4")

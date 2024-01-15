@@ -4,7 +4,14 @@ using System;
 public partial class BoardTile : ColorRect
 {
     [Export]
-    public TileColors TileColor;
+    public TileColors TileColor { 
+        get{ return _tileColor; } 
+        set{
+            _tileColor = value;
+            ChangeTileColor();
+        } 
+    }
+    private TileColors _tileColor;
     public enum TileColors{
         Light,
         Dark 
@@ -15,13 +22,13 @@ public partial class BoardTile : ColorRect
 
     public override void _Ready()
     {
-        UpdateTileColor();
+        ChangeTileColor();
     }
-    public void SetTileColor(TileColors tileColor){
-        TileColor = tileColor;
-        UpdateTileColor();
+    public override void _Process(double delta)
+    {
+        GetNode<Label>("TileId").Text = Name;
     }
-    private void UpdateTileColor(){
+    private void ChangeTileColor(){
         this.Color = TileColor == TileColors.Dark ? _darkTile : _lightTile;
     }
 }
