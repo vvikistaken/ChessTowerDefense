@@ -40,6 +40,8 @@ public partial class ChessPiece : Node2D
 	public override void _Ready()
 	{
 		SetPiece();
+
+		GetNode<Control>("ClickBox").GuiInput += MouseInputs;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -47,7 +49,16 @@ public partial class ChessPiece : Node2D
 	{
 		GetNode<Sprite2D>("PieceSprite").Texture = GD.Load<Texture2D>("res://graphics/sprites/pieces/"+_pieceToLoad+".png");
 	}
-	private void SetPiece(){
+    private void MouseInputs(InputEvent @event)
+    {
+		if(Input.IsActionJustPressed("click")){
+			GD.Print("Color: "+PieceColor);
+			GD.Print("Type: "+PieceType);
+			GD.Print("------------------------------");
+		}
+        	
+    }
+    private void SetPiece(){
 		_pieceToLoad = "";
 		switch(PieceColor){
 			case PieceColors.Light:
@@ -57,8 +68,9 @@ public partial class ChessPiece : Node2D
 				_pieceToLoad += "black";
 			break;
 		}
+
 		_pieceToLoad += "Piece" + (int)PieceType;
 		//GD.Print(_pieceToLoad);
 	}
-	
+
 }
