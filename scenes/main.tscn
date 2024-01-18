@@ -8,4 +8,3 @@
 [node name="UI" parent="." instance=ExtResource("1_x2r32")]
 
 [node name="Board" parent="." instance=ExtResource("2_3tckn")]
-ChessPieceScene = null

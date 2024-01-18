@@ -3,6 +3,8 @@ using System;
 
 public partial class BoardTile : ColorRect
 {
+    [Signal]
+    public delegate void BoardTileClickedEventHandler(BoardTile boardTile);
     [Export]
     public TileColors TileColor { 
         get{ return _tileColor; } 
@@ -23,10 +25,20 @@ public partial class BoardTile : ColorRect
     public override void _Ready()
     {
         ChangeTileColor();
+
+        GuiInput += MouseInputs;
     }
     public override void _Process(double delta)
     {
         GetNode<Label>("TileId").Text = Name;
+    }
+    private void MouseInputs(InputEvent @event)
+    {
+		if(Input.IsActionJustPressed("click")){
+            //GD.Print(this.Name+" clicked");
+            EmitSignal(SignalName.BoardTileClicked, this);
+		}
+        	
     }
     private void ChangeTileColor(){
         this.Color = TileColor == TileColors.Dark ? _darkTile : _lightTile;

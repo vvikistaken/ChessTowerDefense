@@ -1,9 +1,11 @@
 using Godot;
-using System;
-using System.Runtime.CompilerServices;
+using PieceTypes = GlobalVariables.ChessPieceTypes;
+using PieceColors = GlobalVariables.ChessPieceColors;
 
 public partial class ChessPiece : Node2D
 {
+	[Signal]
+	public delegate void ChessPieceClickedEventHandler(ChessPiece chessPiece);
 	[Export]
 	public PieceTypes PieceType { 
 		get{ return _pieceType; }
@@ -22,32 +24,35 @@ public partial class ChessPiece : Node2D
 		} 
 	}
 	private PieceColors _pieceColor;
-	public enum PieceTypes{
-		Pawn,
-		Bishop,
-		Knight,
-		Rook,
-		Queen,
-		King
-	}
-	public enum PieceColors{
-		Light,
-		Dark
-	}
-	
+	private GlobalVariables gVar;
 	private string _pieceToLoad;
+	public bool MoveState = false;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		SetPiece();
 
 		GetNode<Control>("ClickBox").GuiInput += MouseInputs;
+		gVar = GetNode<GlobalVariables>("/root/GlobalVariables");
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		GetNode<Sprite2D>("PieceSprite").Texture = GD.Load<Texture2D>("res://graphics/sprites/pieces/"+_pieceToLoad+".png");
+		var pieceSprite = GetNode<Sprite2D>("PieceSprite");
+		pieceSprite.Texture = GD.Load<Texture2D>("res://graphics/sprites/pieces/"+_pieceToLoad+".png");
+		
+		if(MoveState){
+			if(PieceColor == PieceColors.Light)
+				pieceSprite.Modulate = Color.FromHtml("#74cad6");
+			else if(PieceColor == PieceColors.Dark)
+				pieceSprite.Modulate = Color.FromHtml("#d5102d");
+		}
+		else
+			pieceSprite.Modulate = Color.FromHtml("#fff");
+
+		if(gVar.LastChessPieceClicked != this)
+			MoveState = false;
 	}
     private void MouseInputs(InputEvent @event)
     {
@@ -55,8 +60,9 @@ public partial class ChessPiece : Node2D
 			GD.Print("Color: "+PieceColor);
 			GD.Print("Type: "+PieceType);
 			GD.Print("------------------------------");
+			EmitSignal(SignalName.ChessPieceClicked, this);
+			MoveState = !MoveState;
 		}
-        	
     }
     private void SetPiece(){
 		_pieceToLoad = "";
