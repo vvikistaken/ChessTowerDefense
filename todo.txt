@@ -1,0 +1,9 @@
+To add:
+-taking pieces
+-movement limitation
+-tower defense element (none rn)
+-title
+To change:
+-ui elements to make them look better
+-maybe board look
+-color saturation on pieces / pieces in general
