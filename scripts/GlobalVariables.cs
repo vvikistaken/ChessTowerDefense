@@ -17,4 +17,5 @@ public partial class GlobalVariables : Node
     }
     public BoardTile LastBoardTileClicked;
     public ChessPiece LastChessPieceClicked;
+    public ChessPieceColors CurrentRound = ChessPieceColors.Light;
 }

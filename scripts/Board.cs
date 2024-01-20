@@ -27,7 +27,7 @@ public partial class Board : GridContainer
             CreateBoardTile(i);
         }
 
-        BasicBoardSetup();
+        StandardBoardSetup();
 
         //ChangePiecePosition(GetNode<BoardTile>("E7"), GetNode<BoardTile>("E5"));
     }
@@ -36,6 +36,7 @@ public partial class Board : GridContainer
         if(gVar.LastChessPieceClicked != null && gVar.LastBoardTileClicked != null)
             MovePiece(gVar.LastBoardTileClicked, gVar.LastChessPieceClicked);
     }
+    // for the board tiles creation
     private void CreateBoardTile(int tileId){
         var boardTile = BoardTileScene.Instantiate<BoardTile>();
 
@@ -52,7 +53,6 @@ public partial class Board : GridContainer
                 boardTile.TileColor = BoardTile.TileColors.Dark; 
             else
                 boardTile.TileColor = BoardTile.TileColors.Light; 
-
         }
         else{
             if(tileId % 2 == 1)
@@ -62,6 +62,7 @@ public partial class Board : GridContainer
 
         }
     }
+    // creates a specified chess piece to a board tile
     private void CreateChessPiece(BoardTile boardTile, PieceTypes pieceType, PieceColors pieceColor){
         var chessPiece = ChessPieceScene.Instantiate<ChessPiece>();
 
@@ -73,6 +74,7 @@ public partial class Board : GridContainer
         chessPiece.PieceType = pieceType;
         chessPiece.PieceColor = pieceColor;
     }
+    // pretty self explanatory, i think
     private void ChangePiecePosition(BoardTile oldBoardTile, BoardTile newBoardTile){
         var chessPiece = GetNode<ChessPiece>(oldBoardTile.Name+"/ChessPiece");
 
@@ -80,20 +82,28 @@ public partial class Board : GridContainer
         
         CreateChessPiece(newBoardTile, chessPiece.PieceType, chessPiece.PieceColor);
     }
+    // only gets called when theres is successful movement
     private void MovePiece(BoardTile boardTile, ChessPiece chessPiece){
         if(!CheckForPiece(boardTile)){
             var toMoveTile = chessPiece.GetParent<BoardTile>();
             ChangePiecePosition(toMoveTile, boardTile);
         }
+
+        if(gVar.CurrentRound == PieceColors.Light)
+            gVar.CurrentRound = PieceColors.Dark;
+        else
+            gVar.CurrentRound = PieceColors.Light;
         gVar.LastChessPieceClicked=null;
         gVar.LastBoardTileClicked=null;
+        
     }
     private bool CheckForPiece(BoardTile boardTile){
         if(boardTile.GetNodeOrNull<ChessPiece>("ChessPiece") != null)
             return true;
         return false;
     }
-    private void BasicBoardSetup(){
+    // sets up pieces in a way a normal game would
+    private void StandardBoardSetup(){
         // black
         CreateChessPiece(GetNode<BoardTile>("A1"), PieceTypes.Rook, PieceColors.Dark);
         CreateChessPiece(GetNode<BoardTile>("H1"), PieceTypes.Rook, PieceColors.Dark);

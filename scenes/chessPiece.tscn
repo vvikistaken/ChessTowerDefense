@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8sv75s505fvw"]
+[gd_scene load_steps=2 format=3 uid="uid://qynxq6oa8wj3"]
 
 [ext_resource type="Script" path="res://scripts/ChessPiece.cs" id="1_55b14"]
 
@@ -6,7 +6,6 @@
 script = ExtResource("1_55b14")
 
 [node name="PieceSprite" type="Sprite2D" parent="."]
-modulate = Color(0.835294, 0.0627451, 0.176471, 1)
 position = Vector2(32, 32)
 scale = Vector2(2, 2)
 

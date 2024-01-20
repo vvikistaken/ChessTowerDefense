@@ -1,3 +1,14 @@
-[gd_scene format=3 uid="uid://crfm1i3e56ng3"]
+[gd_scene load_steps=2 format=3 uid="uid://cyo6e728myvjm"]
+
+[ext_resource type="Script" path="res://scripts/UI.cs" id="1_s4o8c"]
 
 [node name="UI" type="CanvasLayer"]
+script = ExtResource("1_s4o8c")
+
+[node name="TurnLabel" type="Label" parent="."]
+offset_right = 192.0
+offset_bottom = 64.0
+theme_override_font_sizes/font_size = 20
+text = "Current Turn: 
+Light"
+vertical_alignment = 1
