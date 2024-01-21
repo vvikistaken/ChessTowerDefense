@@ -83,11 +83,16 @@ public partial class Board : GridContainer
         CreateChessPiece(newBoardTile, chessPiece.PieceType, chessPiece.PieceColor);
     }
     // only gets called when theres is successful movement
-    private void MovePiece(BoardTile boardTile, ChessPiece chessPiece){
-        if(!CheckForPiece(boardTile)){
-            var toMoveTile = chessPiece.GetParent<BoardTile>();
-            ChangePiecePosition(toMoveTile, boardTile);
+    private void MovePiece(BoardTile boardTile, ChessPiece movedPiece){
+        // can be null
+        var pieceOnTile = GetBoardTilePiece(boardTile);
+        var lastPiecePos = movedPiece.GetParent<BoardTile>();
+        
+        if(pieceOnTile is not null && pieceOnTile.PieceColor != movedPiece.PieceColor){
+            boardTile.RemoveChild(pieceOnTile);
         }
+        ChangePiecePosition(lastPiecePos, boardTile);
+        
 
         if(gVar.CurrentRound == PieceColors.Light)
             gVar.CurrentRound = PieceColors.Dark;
@@ -97,10 +102,8 @@ public partial class Board : GridContainer
         gVar.LastBoardTileClicked=null;
         
     }
-    private bool CheckForPiece(BoardTile boardTile){
-        if(boardTile.GetNodeOrNull<ChessPiece>("ChessPiece") != null)
-            return true;
-        return false;
+    private ChessPiece GetBoardTilePiece(BoardTile boardTile){
+        return boardTile.GetNodeOrNull<ChessPiece>("ChessPiece");
     }
     // sets up pieces in a way a normal game would
     private void StandardBoardSetup(){

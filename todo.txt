@@ -1,9 +1,20 @@
 To add:
--taking pieces
 -movement limitation
+	-limiting how far can each piece go depending on it's type
+	-block pieces from jump above them ex.
+		rook can't jump past pieces even when can move there
+	-add "special" moves
+		-castling
+		-starting pawn 2-tile move
+		-en passant
+		-pawn promotion
+	-checkmate
+		-this is an entire diferent can of worms
+		will deal with this later
 -tower defense element (none rn)
 -title
 To change:
 -ui elements to make them look better
 -maybe board look
+-play around with default cursor shape in chess piece
 -color saturation on pieces / pieces in general

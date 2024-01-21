@@ -25,14 +25,17 @@ public partial class ChessPiece : Node2D
 	}
 	private PieceColors _pieceColor;
 	private GlobalVariables gVar;
+	private Control _clickBox;
 	private string _pieceToLoad;
 	public bool MoveState = false;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		_clickBox = GetNode<Control>("ClickBox");
+
 		SetPiece();
 
-		GetNode<Control>("ClickBox").GuiInput += MouseInputs;
+		_clickBox.GuiInput += MouseInputs;
 		gVar = GetNode<GlobalVariables>("/root/GlobalVariables");
 	}
 
@@ -56,6 +59,12 @@ public partial class ChessPiece : Node2D
 	}
     private void MouseInputs(InputEvent @event)
     {
+		// for getting board tile inputs, even when there is a piece 
+		if(gVar.CurrentRound == PieceColor)
+			_clickBox.MouseFilter = Control.MouseFilterEnum.Stop;
+		else
+			_clickBox.MouseFilter = Control.MouseFilterEnum.Pass;
+
 		if(Input.IsActionJustPressed("click") && gVar.CurrentRound == PieceColor){
 			/*
 			GD.Print("Color: "+PieceColor);
