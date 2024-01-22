@@ -1,7 +1,12 @@
 To add:
+-visuals for where pieces can go
+	-implement after movement limitation
 -movement limitation
 	-limiting how far can each piece go depending on it's type
-	-block pieces from jump above them ex.
+		-pawn can move 1 tile forward
+		-king, 1 tile any direction
+		-queen, how far she can see
+	-block pieces from jump above them, ex.
 		rook can't jump past pieces even when can move there
 	-add "special" moves
 		-castling
