@@ -35,6 +35,7 @@ public partial class Board : GridContainer
     {
         if(gVar.LastChessPieceClicked != null && gVar.LastBoardTileClicked != null)
             MovePiece(gVar.LastBoardTileClicked, gVar.LastChessPieceClicked);
+
     }
     // for the board tiles creation
     private void CreateBoardTile(int tileId){

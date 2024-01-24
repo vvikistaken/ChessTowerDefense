@@ -6,6 +6,9 @@ public partial class ChessPiece : Node2D
 {
 	[Signal]
 	public delegate void ChessPieceClickedEventHandler(ChessPiece chessPiece);
+	private PieceTypes _pieceType;
+	private PieceColors _pieceColor;
+	private bool _moveState;
 	[Export]
 	public PieceTypes PieceType { 
 		get{ return _pieceType; }
@@ -14,7 +17,6 @@ public partial class ChessPiece : Node2D
 			SetPiece();
 		}
 	}
-	private PieceTypes _pieceType;
 	[Export]
 	public PieceColors PieceColor{ 
 		get{ return _pieceColor; }
@@ -23,15 +25,27 @@ public partial class ChessPiece : Node2D
 			SetPiece();
 		} 
 	}
-	private PieceColors _pieceColor;
+	private bool MoveState { 
+		get{
+			return _moveState;
+		}	 
+		set{
+			_moveState = value;
+			Highlight(_moveState);
+		}
+	}
+	
 	private GlobalVariables gVar;
 	private Control _clickBox;
+	private Sprite2D _pieceSprite;
 	private string _pieceToLoad;
-	public bool MoveState = false;
+	
+	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_clickBox = GetNode<Control>("ClickBox");
+		_pieceSprite = GetNode<Sprite2D>("PieceSprite");
 
 		SetPiece();
 
@@ -42,37 +56,27 @@ public partial class ChessPiece : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		var pieceSprite = GetNode<Sprite2D>("PieceSprite");
-		pieceSprite.Texture = GD.Load<Texture2D>("res://graphics/sprites/pieces/"+_pieceToLoad+".png");
+		_pieceSprite.Texture = GD.Load<Texture2D>("res://graphics/sprites/pieces/"+_pieceToLoad+".png");
 		
-		if(MoveState){
-			if(PieceColor == PieceColors.Light)
-				pieceSprite.Modulate = Color.FromHtml("#74cad6");
-			else if(PieceColor == PieceColors.Dark)
-				pieceSprite.Modulate = Color.FromHtml("#d5102d");
-		}
-		else
-			pieceSprite.Modulate = Color.FromHtml("#fff");
-
 		if(gVar.LastChessPieceClicked != this)
 			MoveState = false;
 	}
     private void MouseInputs(InputEvent @event)
     {
-		// for getting board tile inputs, even when there is a piece 
-		if(gVar.CurrentRound == PieceColor)
-			_clickBox.MouseFilter = Control.MouseFilterEnum.Stop;
-		else
-			_clickBox.MouseFilter = Control.MouseFilterEnum.Pass;
-
 		if(Input.IsActionJustPressed("click") && gVar.CurrentRound == PieceColor){
 			/*
 			GD.Print("Color: "+PieceColor);
 			GD.Print("Type: "+PieceType);
 			GD.Print("------------------------------");
 			*/
-			EmitSignal(SignalName.ChessPieceClicked, this);
+			_clickBox.MouseFilter = Control.MouseFilterEnum.Stop;
+
 			MoveState = !MoveState;
+			EmitSignal(SignalName.ChessPieceClicked, this);
+		}
+		else{
+			_clickBox.MouseFilter = Control.MouseFilterEnum.Pass;
+
 		}
     }
     private void SetPiece(){
@@ -88,6 +92,14 @@ public partial class ChessPiece : Node2D
 
 		_pieceToLoad += "Piece" + (int)PieceType;
 		//GD.Print(_pieceToLoad);
+	}
+	private void Highlight(bool isInverted){
+		//((ShaderMaterial)_pieceSprite.Material).SetShaderParameter("Invert", isInverted);
+		if(isInverted)
+			_pieceSprite.Modulate = _pieceSprite.Modulate.Blend(Color.FromHtml("#4ecaff"));
+		else
+			_pieceSprite.Modulate = Color.FromHtml("#fff");
+		//GD.Print("Highlight works");
 	}
 
 }

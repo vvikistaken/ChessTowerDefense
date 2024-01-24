@@ -1,3 +1,5 @@
+To finish:
+-shader/ modulate on for selected pieces
 To add:
 -visuals for where pieces can go
 	-implement after movement limitation

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/Board.cs" id="1_7lcc6"]
 [ext_resource type="PackedScene" uid="uid://dcfdac13336cu" path="res://scenes/boardTile.tscn" id="2_u26hx"]
-[ext_resource type="PackedScene" uid="uid://c8sv75s505fvw" path="res://scenes/chessPiece.tscn" id="3_trku4"]
+[ext_resource type="PackedScene" uid="uid://qynxq6oa8wj3" path="res://scenes/chessPiece.tscn" id="3_trku4"]
 
 [node name="Board" type="GridContainer"]
 custom_minimum_size = Vector2(512, 512)
