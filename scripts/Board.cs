@@ -33,9 +33,11 @@ public partial class Board : GridContainer
     }
     public override void _Process(double delta)
     {
-        if(gVar.LastChessPieceClicked != null && gVar.LastBoardTileClicked != null)
-            MovePiece(gVar.LastBoardTileClicked, gVar.LastChessPieceClicked);
-
+        if(gVar.LastPieceClicked != null && gVar.LastTileClicked != null)
+            if(CheckMove())
+                MovePiece(gVar.LastTileClicked, gVar.LastPieceClicked);
+            else
+                gVar.LastTileClicked = null;
     }
     // for the board tiles creation
     private void CreateBoardTile(int tileId){
@@ -43,10 +45,10 @@ public partial class Board : GridContainer
 
         AddChild(boardTile);
 
-        boardTile.BoardTileClicked += (BoardTile boardTile) => gVar.LastBoardTileClicked = boardTile;
-        boardTile.BoardTileClicked += (nothing) => GD.Print(gVar.LastBoardTileClicked.Name+" clicked");
+        boardTile.BoardTileClicked += (BoardTile boardTile) => gVar.LastTileClicked = boardTile;
 
-
+        boardTile.X = tileId%8;
+        boardTile.Y = tileId/8;
         boardTile.Name = _aplhabet[tileId%8] + ((tileId/8)+1).ToString();
 
         if((tileId / 8) % 2 == 1 ){ 
@@ -64,13 +66,14 @@ public partial class Board : GridContainer
         }
     }
     // creates a specified chess piece to a board tile
-    private void CreateChessPiece(BoardTile boardTile, PieceTypes pieceType, PieceColors pieceColor){
+    private void CreateChessPiece(BoardTile boardTile, PieceTypes pieceType, PieceColors pieceColor, bool isNew){
         var chessPiece = ChessPieceScene.Instantiate<ChessPiece>();
 
         boardTile.AddChild(chessPiece);
 
-        chessPiece.ChessPieceClicked += (ChessPiece chessPiece) => gVar.LastChessPieceClicked = chessPiece;
-        chessPiece.ChessPieceClicked += (ChessPiece chessPiece) => gVar.LastBoardTileClicked = null;
+        chessPiece.FirstMove = isNew;
+
+        chessPiece.ChessPieceClicked += OnChessPieceClicked;
 
         chessPiece.PieceType = pieceType;
         chessPiece.PieceColor = pieceColor;
@@ -81,56 +84,125 @@ public partial class Board : GridContainer
 
         oldBoardTile.RemoveChild(chessPiece);
         
-        CreateChessPiece(newBoardTile, chessPiece.PieceType, chessPiece.PieceColor);
+        CreateChessPiece(newBoardTile, chessPiece.PieceType, chessPiece.PieceColor, false);
     }
     // only gets called when theres is successful movement
     private void MovePiece(BoardTile boardTile, ChessPiece movedPiece){
         // can be null
-        var pieceOnTile = GetBoardTilePiece(boardTile);
+        var pieceOnTile = CheckForPiece(boardTile);
         var lastPiecePos = movedPiece.GetParent<BoardTile>();
         
         if(pieceOnTile is not null && pieceOnTile.PieceColor != movedPiece.PieceColor){
             boardTile.RemoveChild(pieceOnTile);
         }
         ChangePiecePosition(lastPiecePos, boardTile);
-        
 
         if(gVar.CurrentRound == PieceColors.Light)
             gVar.CurrentRound = PieceColors.Dark;
         else
             gVar.CurrentRound = PieceColors.Light;
-        gVar.LastChessPieceClicked=null;
-        gVar.LastBoardTileClicked=null;
+        gVar.LastPieceClicked=null;
+        gVar.LastTileClicked=null;
         
     }
-    private ChessPiece GetBoardTilePiece(BoardTile boardTile){
+    private ChessPiece CheckForPiece(BoardTile boardTile){
         return boardTile.GetNodeOrNull<ChessPiece>("ChessPiece");
+    }
+    // this is where the piece movement limitation happends
+    private bool CheckMove(){
+        var piece = gVar.LastPieceClicked;
+        var curPiecePos = piece.GetParent<BoardTile>();
+        var toMoveTile = gVar.LastTileClicked;
+        
+        GD.Print("x move: "+(curPiecePos.X - toMoveTile.X));
+        GD.Print("y move: "+(curPiecePos.Y - toMoveTile.Y));
+        switch(piece.PieceType){
+            
+            case PieceTypes.Pawn:
+                if(curPiecePos.X == toMoveTile.X){
+                    if(piece.FirstMove){
+                        if((curPiecePos.Y - toMoveTile.Y) <= 2 &&
+                            (curPiecePos.Y - toMoveTile.Y) > 0 &&
+                            piece.PieceColor == PieceColors.Light
+                        )
+                            return true;
+                        if((curPiecePos.Y - toMoveTile.Y) >= -2 &&
+                            (curPiecePos.Y - toMoveTile.Y) < 0 &&
+                            piece.PieceColor == PieceColors.Dark)
+                            return true;
+                    }
+                    else if(CheckForPiece(toMoveTile) != null &&
+                            ((curPiecePos.X - toMoveTile.X) == -1 ||
+                            (curPiecePos.X - toMoveTile.X) == 1)
+                    )
+                        return true;
+                    else {
+                        if((curPiecePos.Y - toMoveTile.Y) <= 1 &&
+                            (curPiecePos.Y - toMoveTile.Y) > 0 &&
+                            piece.PieceColor == PieceColors.Light
+                        )
+                            return true;
+                        if((curPiecePos.Y - toMoveTile.Y) >= -1 &&
+                            (curPiecePos.Y - toMoveTile.Y) < 0 &&
+                             piece.PieceColor == PieceColors.Dark)
+                            return true;
+                    }
+                }
+            return false;
+            /*
+            case PieceTypes.Bishop:
+
+            break;
+            case PieceTypes.Knight:
+
+            break;
+            case PieceTypes.Rook:
+
+            break;
+            case PieceTypes.Queen:
+
+            break;
+            case PieceTypes.King:
+
+            break;
+            */
+            default:
+            return true;
+        }
+    }
+    private void OnChessPieceClicked(ChessPiece chessPiece){
+        if(gVar.LastPieceClicked is null)
+            gVar.LastPieceClicked = chessPiece;
+        else
+            gVar.LastPieceClicked = null;
+
+        gVar.LastTileClicked = null;
     }
     // sets up pieces in a way a normal game would
     private void StandardBoardSetup(){
         // black
-        CreateChessPiece(GetNode<BoardTile>("A1"), PieceTypes.Rook, PieceColors.Dark);
-        CreateChessPiece(GetNode<BoardTile>("H1"), PieceTypes.Rook, PieceColors.Dark);
-        CreateChessPiece(GetNode<BoardTile>("B1"), PieceTypes.Knight, PieceColors.Dark);
-        CreateChessPiece(GetNode<BoardTile>("G1"), PieceTypes.Knight, PieceColors.Dark);
-        CreateChessPiece(GetNode<BoardTile>("C1"), PieceTypes.Bishop, PieceColors.Dark);
-        CreateChessPiece(GetNode<BoardTile>("F1"), PieceTypes.Bishop, PieceColors.Dark);
-        CreateChessPiece(GetNode<BoardTile>("D1"), PieceTypes.Queen, PieceColors.Dark);
-        CreateChessPiece(GetNode<BoardTile>("E1"), PieceTypes.King, PieceColors.Dark);
+        CreateChessPiece(GetNode<BoardTile>("A1"), PieceTypes.Rook, PieceColors.Dark, true);
+        CreateChessPiece(GetNode<BoardTile>("H1"), PieceTypes.Rook, PieceColors.Dark, true);
+        CreateChessPiece(GetNode<BoardTile>("B1"), PieceTypes.Knight, PieceColors.Dark, true);
+        CreateChessPiece(GetNode<BoardTile>("G1"), PieceTypes.Knight, PieceColors.Dark, true);
+        CreateChessPiece(GetNode<BoardTile>("C1"), PieceTypes.Bishop, PieceColors.Dark, true);
+        CreateChessPiece(GetNode<BoardTile>("F1"), PieceTypes.Bishop, PieceColors.Dark, true);
+        CreateChessPiece(GetNode<BoardTile>("D1"), PieceTypes.Queen, PieceColors.Dark, true);
+        CreateChessPiece(GetNode<BoardTile>("E1"), PieceTypes.King, PieceColors.Dark, true);
         for(int i=0; i < 8; i++){
-            CreateChessPiece(GetNode<BoardTile>(_aplhabet[i]+"2"), PieceTypes.Pawn, PieceColors.Dark);
+            CreateChessPiece(GetNode<BoardTile>(_aplhabet[i]+"2"), PieceTypes.Pawn, PieceColors.Dark, true);
         }
         //white
-        CreateChessPiece(GetNode<BoardTile>("A8"), PieceTypes.Rook, PieceColors.Light);
-        CreateChessPiece(GetNode<BoardTile>("H8"), PieceTypes.Rook, PieceColors.Light);
-        CreateChessPiece(GetNode<BoardTile>("B8"), PieceTypes.Knight, PieceColors.Light);
-        CreateChessPiece(GetNode<BoardTile>("G8"), PieceTypes.Knight, PieceColors.Light);
-        CreateChessPiece(GetNode<BoardTile>("C8"), PieceTypes.Bishop, PieceColors.Light);
-        CreateChessPiece(GetNode<BoardTile>("F8"), PieceTypes.Bishop, PieceColors.Light);
-        CreateChessPiece(GetNode<BoardTile>("D8"), PieceTypes.Queen, PieceColors.Light);
-        CreateChessPiece(GetNode<BoardTile>("E8"), PieceTypes.King, PieceColors.Light);
+        CreateChessPiece(GetNode<BoardTile>("A8"), PieceTypes.Rook, PieceColors.Light, true);
+        CreateChessPiece(GetNode<BoardTile>("H8"), PieceTypes.Rook, PieceColors.Light, true);
+        CreateChessPiece(GetNode<BoardTile>("B8"), PieceTypes.Knight, PieceColors.Light, true);
+        CreateChessPiece(GetNode<BoardTile>("G8"), PieceTypes.Knight, PieceColors.Light, true);
+        CreateChessPiece(GetNode<BoardTile>("C8"), PieceTypes.Bishop, PieceColors.Light, true);
+        CreateChessPiece(GetNode<BoardTile>("F8"), PieceTypes.Bishop, PieceColors.Light, true);
+        CreateChessPiece(GetNode<BoardTile>("D8"), PieceTypes.Queen, PieceColors.Light, true);
+        CreateChessPiece(GetNode<BoardTile>("E8"), PieceTypes.King, PieceColors.Light, true);
         for(int i=0; i < 8; i++){
-            CreateChessPiece(GetNode<BoardTile>(_aplhabet[i]+"7"), PieceTypes.Pawn, PieceColors.Light);
+            CreateChessPiece(GetNode<BoardTile>(_aplhabet[i]+"7"), PieceTypes.Pawn, PieceColors.Light, true);
         }
     }
 }
