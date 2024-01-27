@@ -38,8 +38,8 @@ public partial class ChessPiece : Node2D
 	private GlobalVariables gVar;
 	private Control _clickBox;
 	private Sprite2D _pieceSprite;
+
 	private string _pieceToLoad;
-	
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

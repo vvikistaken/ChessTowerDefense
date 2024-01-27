@@ -93,7 +93,6 @@ public partial class Board : GridContainer
             boardTile.RemoveChild(pieceOnTile);
         }
         ChangePiecePosition(lastPiecePos, boardTile);
-        
 
         if(gVar.CurrentRound == PieceColors.Light)
             gVar.CurrentRound = PieceColors.Dark;
