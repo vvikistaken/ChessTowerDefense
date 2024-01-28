@@ -66,7 +66,9 @@ public partial class ChessPiece : Node2D
 	}
     private void MouseInputs(InputEvent @event)
     {
-		if(Input.IsActionJustPressed("click") && gVar.CurrentRound == PieceColor){
+		if( (@event is InputEventMouseButton) &&
+			 @event.IsPressed() && gVar.CurrentRound == PieceColor ){
+			GD.Print(@event);
 			/*
 			GD.Print("Color: "+PieceColor);
 			GD.Print("Type: "+PieceType);

@@ -35,7 +35,8 @@ public partial class BoardTile : ColorRect
     }
     private void MouseInputs(InputEvent @event)
     {
-		if(Input.IsActionJustPressed("click")){
+		if( @event is InputEventMouseButton &&
+			 @event.IsPressed() ){
             GD.Print(this.Name+" - X: "+X+", Y: "+Y);
             EmitSignal(SignalName.BoardTileClicked, this);
 		}

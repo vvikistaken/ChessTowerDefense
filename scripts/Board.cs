@@ -97,10 +97,12 @@ public partial class Board : GridContainer
         var lastPiecePos = movedPiece.GetParent<BoardTile>();
         
         if(pieceOnTile is not null && pieceOnTile.PieceColor != movedPiece.PieceColor){
-            if(pieceOnTile.PieceType == PieceTypes.King)
+            if(pieceOnTile.PieceType == PieceTypes.King){
+                pieceOnTile.Visible = false;
                 EmitSignal(SignalName.GameEnd, (int)movedPiece.PieceColor);
-        
-            boardTile.RemoveChild(pieceOnTile);
+            }
+            else
+                boardTile.RemoveChild(pieceOnTile);
         }
         ChangePiecePosition(lastPiecePos, boardTile);
 

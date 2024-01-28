@@ -11,6 +11,8 @@ public partial class UI : CanvasLayer
 		gVar = GetNode<GlobalVariables>("/root/GlobalVariables");
 		_board = GetNode<Board>("../Board");
 
+		GetNode<Button>("EndScreen/RetryButton").Pressed += OnRetryPressed;
+
 		_board.GameEnd += OnGameEnd;
 	}
 
@@ -20,10 +22,15 @@ public partial class UI : CanvasLayer
 		GetNode<Label>("TurnLabel").Text = "Current Turn:\n"+gVar.CurrentRound;
 	}
 	private async void OnGameEnd(GlobalVariables.ChessPieceColors winners){
-		GetNode<Label>("EndLabel").Text = winners + " won";
-		GetNode<Label>("EndLabel").Visible = true;
+		GetNode<Label>("EndScreen/EndLabel").Text = winners + " won";
+		GetNode<Control>("EndScreen").Visible = true;
 		
 		await ToSignal(GetTree().CreateTimer(1), Timer.SignalName.Timeout);
 		GetTree().Paused = true;
+	}
+	private void OnRetryPressed(){
+		GetTree().Paused = false;
+		GetTree().ChangeSceneToFile("res://scenes/main.tscn");
+		gVar.CurrentRound = GlobalVariables.ChessPieceColors.Light;
 	}
 }
