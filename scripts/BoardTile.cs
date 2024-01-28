@@ -18,6 +18,7 @@ public partial class BoardTile : ColorRect
         Light,
         Dark 
     }
+    public int X, Y;
     
     private Color _darkTile = Color.FromHtml("#769656"),
                  _lightTile = Color.FromHtml("#eeeed2");
@@ -35,10 +36,9 @@ public partial class BoardTile : ColorRect
     private void MouseInputs(InputEvent @event)
     {
 		if(Input.IsActionJustPressed("click")){
-            //GD.Print(this.Name+" clicked");
+            GD.Print(this.Name+" - X: "+X+", Y: "+Y);
             EmitSignal(SignalName.BoardTileClicked, this);
 		}
-        	
     }
     private void ChangeTileColor(){
         this.Color = TileColor == TileColors.Dark ? _darkTile : _lightTile;

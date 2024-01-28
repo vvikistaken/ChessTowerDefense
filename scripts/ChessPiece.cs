@@ -6,6 +6,7 @@ public partial class ChessPiece : Node2D
 {
 	[Signal]
 	public delegate void ChessPieceClickedEventHandler(ChessPiece chessPiece);
+	// for get/set
 	private PieceTypes _pieceType;
 	private PieceColors _pieceColor;
 	private bool _moveState;
@@ -34,12 +35,14 @@ public partial class ChessPiece : Node2D
 			Highlight(_moveState);
 		}
 	}
-	
+	public bool FirstMove = true;
+	private string _pieceToLoad;
+
 	private GlobalVariables gVar;
 	private Control _clickBox;
 	private Sprite2D _pieceSprite;
-
-	private string _pieceToLoad;
+	
+	
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -58,7 +61,7 @@ public partial class ChessPiece : Node2D
 	{
 		_pieceSprite.Texture = GD.Load<Texture2D>("res://graphics/sprites/pieces/"+_pieceToLoad+".png");
 		
-		if(gVar.LastChessPieceClicked != this)
+		if(gVar.LastPieceClicked != this)
 			MoveState = false;
 	}
     private void MouseInputs(InputEvent @event)
@@ -94,9 +97,10 @@ public partial class ChessPiece : Node2D
 		//GD.Print(_pieceToLoad);
 	}
 	private void Highlight(bool isInverted){
+		// shader doesnt work for some reason
 		//((ShaderMaterial)_pieceSprite.Material).SetShaderParameter("Invert", isInverted);
 		if(isInverted)
-			_pieceSprite.Modulate = _pieceSprite.Modulate.Blend(Color.FromHtml("#4ecaff"));
+			_pieceSprite.Modulate = _pieceSprite.Modulate.Inverted();
 		else
 			_pieceSprite.Modulate = Color.FromHtml("#fff");
 		//GD.Print("Highlight works");

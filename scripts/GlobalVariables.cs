@@ -15,7 +15,7 @@ public partial class GlobalVariables : Node
         Light,
         Dark
     }
-    public BoardTile LastBoardTileClicked;
-    public ChessPiece LastChessPieceClicked;
+    public BoardTile LastTileClicked;
+    public ChessPiece LastPieceClicked;
     public ChessPieceColors CurrentRound = ChessPieceColors.Light;
 }
