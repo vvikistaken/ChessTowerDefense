@@ -20,8 +20,8 @@ public partial class BoardTile : ColorRect
     }
     public int X, Y;
     
-    private Color _darkTile = Color.FromHtml("#769656"),
-                 _lightTile = Color.FromHtml("#eeeed2");
+    private Color _darkTile = Color.FromHtml("#afc3dc"),
+                 _lightTile = Color.FromHtml("#eceef0");
 
     public override void _Ready()
     {

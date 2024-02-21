@@ -95,7 +95,7 @@ public partial class ChessPiece : Node2D
 			break;
 		}
 
-		_pieceToLoad += "Piece" + (int)PieceType;
+		_pieceToLoad += "Piece" + ((int)PieceType+1);
 		//GD.Print(_pieceToLoad);
 	}
 	private void Highlight(bool isInverted){
