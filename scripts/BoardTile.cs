@@ -23,15 +23,21 @@ public partial class BoardTile : ColorRect
     private Color _darkTile = Color.FromHtml("#afc3dc"),
                  _lightTile = Color.FromHtml("#eceef0");
 
+    private TextureRect _marker;
+
     public override void _Ready()
     {
         ChangeTileColor();
 
         GuiInput += MouseInputs;
+        _marker = GetNode<TextureRect>("Marker");
     }
     public override void _Process(double delta)
     {
         GetNode<Label>("TileId").Text = Name;
+    }
+    public void MarkerVisibility(bool visible){
+        _marker.Visible = visible;
     }
     private void MouseInputs(InputEvent @event)
     {
