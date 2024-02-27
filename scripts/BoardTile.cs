@@ -34,7 +34,7 @@ public partial class BoardTile : ColorRect
     }
     public override void _Process(double delta)
     {
-        GetNode<Label>("TileId").Text = Name;
+        GetNode<Label>("TileId").Text = Name + "\nx:"+X+"|y:"+Y;
     }
     public void MarkerVisibility(bool visible){
         _marker.Visible = visible;
