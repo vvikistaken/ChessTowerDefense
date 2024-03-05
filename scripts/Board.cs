@@ -144,6 +144,8 @@ public partial class Board : GridContainer
     }
     // returns board tile based on theirs coords
     private BoardTile GetBoardTile(int x, int y){
+        if(x < 0 || x >= 26)
+            return null;
         BoardTile boardTile = GetNodeOrNull<BoardTile>(_aplhabet[x] + (y+1).ToString());;
 
         return boardTile;
@@ -380,6 +382,110 @@ public partial class Board : GridContainer
                     else
                         bottomRight = false;
                 }
+            break;
+            case PieceTypes.Knight:
+                // 2 left, 1 up
+                if(CheckTileForPiece(xPosition-2 , yPosition-1) == null)
+                    MarkBoardTile(GetBoardTile(xPosition-2, yPosition-1), true);
+                if(CheckTileForPiece(xPosition-2, yPosition-1) != null)
+                    if(CheckTileForPiece(xPosition-2, yPosition-1).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition-2, yPosition-1), true);
+                // 2 right, 1 up
+                if(CheckTileForPiece(xPosition+2 , yPosition-1) == null)
+                    MarkBoardTile(GetBoardTile(xPosition+2, yPosition-1), true);
+                if(CheckTileForPiece(xPosition+2, yPosition-1) != null)
+                    if(CheckTileForPiece(xPosition+2, yPosition-1).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition+2, yPosition-1), true);
+                // 2 left, 1 down
+                if(CheckTileForPiece(xPosition-2 , yPosition+1) == null)
+                    MarkBoardTile(GetBoardTile(xPosition-2, yPosition+1), true);
+                if(CheckTileForPiece(xPosition-2, yPosition+1) != null)
+                    if(CheckTileForPiece(xPosition-2, yPosition+1).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition-2, yPosition+1), true);
+                // 2 right, 1 down
+                if(CheckTileForPiece(xPosition+2 , yPosition+1) == null)
+                    MarkBoardTile(GetBoardTile(xPosition+2, yPosition+1), true);
+                if(CheckTileForPiece(xPosition+2, yPosition+1) != null)
+                    if(CheckTileForPiece(xPosition+2, yPosition+1).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition+2, yPosition+1), true);
+                // 1 left, 2 up
+                if(CheckTileForPiece(xPosition-1 , yPosition-2) == null)
+                    MarkBoardTile(GetBoardTile(xPosition-1 , yPosition-2), true);
+                if(CheckTileForPiece(xPosition-1 , yPosition-2) != null)
+                    if(CheckTileForPiece(xPosition-1 , yPosition-2).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition-1 , yPosition-2), true);
+                // 1 right, 2 up
+                if(CheckTileForPiece(xPosition+1 , yPosition-2) == null)
+                    MarkBoardTile(GetBoardTile(xPosition+1 , yPosition-2), true);
+                if(CheckTileForPiece(xPosition+1 , yPosition-2) != null)
+                    if(CheckTileForPiece(xPosition+1 , yPosition-2).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition+1 , yPosition-2), true);
+                // 1 left, 2 down
+                if(CheckTileForPiece(xPosition-1 , yPosition+2) == null)
+                    MarkBoardTile(GetBoardTile(xPosition-1 , yPosition+2), true);
+                if(CheckTileForPiece(xPosition-1 , yPosition+2) != null)
+                    if(CheckTileForPiece(xPosition-1 , yPosition+2).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition-1 , yPosition+2), true);
+                // 1 right, 2 down
+                if(CheckTileForPiece(xPosition+1 , yPosition+2) == null)
+                    MarkBoardTile(GetBoardTile(xPosition+1 , yPosition+2), true);
+                if(CheckTileForPiece(xPosition+1 , yPosition+2) != null)
+                    if(CheckTileForPiece(xPosition+1 , yPosition+2).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition+1 , yPosition+2), true);
+            break;
+            case PieceTypes.Rook:
+                bool top, bottom, left, right;
+                top = bottom = left = right = true;
+
+                for(int i = 1; i < Columns; i++){
+                    if(xPosition-i >= 0 & top){
+                            if(CheckTileForPiece(xPosition - i, yPosition) == null)
+                                MarkBoardTile(GetBoardTile(xPosition - i, yPosition), true);
+                            if(CheckTileForPiece(xPosition - i, yPosition) != null){
+                                if(CheckTileForPiece(xPosition - i, yPosition).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition - i, yPosition), true);
+                                top = false;
+                            }
+                        }
+                    else
+                        top = false;
+                    if(xPosition+i < Columns & bottom){
+                            if(CheckTileForPiece(xPosition + i, yPosition) == null)
+                                MarkBoardTile(GetBoardTile(xPosition + i, yPosition), true);
+                            if(CheckTileForPiece(xPosition + i, yPosition) != null){
+                                if(CheckTileForPiece(xPosition + i, yPosition).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition + i, yPosition), true);
+                                bottom = false;
+                            }
+                        }
+                    else
+                        bottom = false;
+                    if(yPosition-i >= 0 & left){
+                            if(CheckTileForPiece(xPosition, yPosition - i) == null)
+                                MarkBoardTile(GetBoardTile(xPosition, yPosition - i), true);
+                            if(CheckTileForPiece(xPosition, yPosition - i) != null){
+                                if(CheckTileForPiece(xPosition, yPosition - i).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition, yPosition - i), true);
+                                left = false;
+                            }
+                        }
+                    else
+                        left = false;
+                    if(yPosition+i < Columns & right){
+                            if(CheckTileForPiece(xPosition, yPosition + i) == null)
+                                MarkBoardTile(GetBoardTile(xPosition, yPosition + i), true);
+                            if(CheckTileForPiece(xPosition, yPosition + i) != null){
+                                if(CheckTileForPiece(xPosition, yPosition + i).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition, yPosition + i), true);
+                                right = false;
+                            }
+                        }
+                    else
+                        right = false;
+                }
+            break;
+            case PieceTypes.Queen:
+            
             break;
         }
         
