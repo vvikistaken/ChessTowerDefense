@@ -282,10 +282,14 @@ public partial class Board : GridContainer
             return true;
         }
     }
-    // fuck it, we ball / mark the tiles that a specified pieces can move
+    // mark the tiles that a specified pieces can move
+    // surely there is a better way to do it 
+    // there is like 400 lines of code that could be shortenend/simplified
     private void MarkBoardTiles(ChessPiece piece){
         int xPosition = (int)piece.GetParent<BoardTile>().Get("X"),
             yPosition = (int)piece.GetParent<BoardTile>().Get("Y");
+        bool top, bottom, left, right;
+        bool topLeft, topRight, bottomLeft, bottomRight;
 
         GD.Print($"xPos: {xPosition} | yPos: {yPosition}");
 
@@ -328,7 +332,6 @@ public partial class Board : GridContainer
                 }
             break;
             case PieceTypes.Bishop:
-                bool topLeft, topRight, bottomLeft, bottomRight;
                 topLeft = topRight = bottomLeft = bottomRight = true;
 
                 for(int i = 1; i < Columns; i++){
@@ -434,7 +437,6 @@ public partial class Board : GridContainer
                         MarkBoardTile(GetBoardTile(xPosition+1 , yPosition+2), true);
             break;
             case PieceTypes.Rook:
-                bool top, bottom, left, right;
                 top = bottom = left = right = true;
 
                 for(int i = 1; i < Columns; i++){
@@ -485,10 +487,158 @@ public partial class Board : GridContainer
                 }
             break;
             case PieceTypes.Queen:
-            
+                top = bottom = left = right = true;
+                topLeft = topRight = bottomLeft = bottomRight = true;
+
+                for(int i = 1; i < Columns; i++){
+                    if(xPosition-i >= 0 & top){
+                            if(CheckTileForPiece(xPosition - i, yPosition) == null)
+                                MarkBoardTile(GetBoardTile(xPosition - i, yPosition), true);
+                            if(CheckTileForPiece(xPosition - i, yPosition) != null){
+                                if(CheckTileForPiece(xPosition - i, yPosition).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition - i, yPosition), true);
+                                top = false;
+                            }
+                        }
+                    else
+                        top = false;
+                    if(xPosition+i < Columns & bottom){
+                            if(CheckTileForPiece(xPosition + i, yPosition) == null)
+                                MarkBoardTile(GetBoardTile(xPosition + i, yPosition), true);
+                            if(CheckTileForPiece(xPosition + i, yPosition) != null){
+                                if(CheckTileForPiece(xPosition + i, yPosition).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition + i, yPosition), true);
+                                bottom = false;
+                            }
+                        }
+                    else
+                        bottom = false;
+                    if(yPosition-i >= 0 & left){
+                            if(CheckTileForPiece(xPosition, yPosition - i) == null)
+                                MarkBoardTile(GetBoardTile(xPosition, yPosition - i), true);
+                            if(CheckTileForPiece(xPosition, yPosition - i) != null){
+                                if(CheckTileForPiece(xPosition, yPosition - i).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition, yPosition - i), true);
+                                left = false;
+                            }
+                        }
+                    else
+                        left = false;
+                    if(yPosition+i < Columns & right){
+                            if(CheckTileForPiece(xPosition, yPosition + i) == null)
+                                MarkBoardTile(GetBoardTile(xPosition, yPosition + i), true);
+                            if(CheckTileForPiece(xPosition, yPosition + i) != null){
+                                if(CheckTileForPiece(xPosition, yPosition + i).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition, yPosition + i), true);
+                                right = false;
+                            }
+                        }
+                    else
+                        right = false;
+                }
+                for(int i = 1; i < Columns; i++){
+                    //GD.Print($"TL: {topLeft} | TR: {topRight} | BL: {bottomLeft} | BR: {bottomRight}");
+                    if(xPosition-i >= 0 & yPosition-i >= 0 &
+                        topLeft){
+                            if(CheckTileForPiece(xPosition - i, yPosition - i) == null)
+                                MarkBoardTile(GetBoardTile(xPosition - i, yPosition - i), true);
+                            if(CheckTileForPiece(xPosition - i, yPosition - i) != null){
+                                if(CheckTileForPiece(xPosition - i, yPosition - i).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition - i, yPosition - i), true);
+                                topLeft = false;
+                            }
+                        }
+                    else
+                        topLeft = false;
+                    if(xPosition+i < Columns & yPosition-i >= 0 &
+                        topRight){
+                            if(CheckTileForPiece(xPosition + i, yPosition - i) == null)
+                                MarkBoardTile(GetBoardTile(xPosition + i, yPosition - i), true);
+                            if(CheckTileForPiece(xPosition + i, yPosition - i) != null){
+                                if(CheckTileForPiece(xPosition + i, yPosition - i).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition + i, yPosition - i), true);
+                                topRight = false;
+                            }
+                        }
+                    else
+                        topRight = false;
+                    if(xPosition-i >= 0 & yPosition+i < Columns &
+                        bottomLeft){
+                            if(CheckTileForPiece(xPosition - i, yPosition + i) == null)
+                                MarkBoardTile(GetBoardTile(xPosition - i, yPosition + i), true);
+                            if(CheckTileForPiece(xPosition - i, yPosition + i) != null){
+                                if(CheckTileForPiece(xPosition - i, yPosition + i).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition - i, yPosition + i), true);
+                                bottomLeft = false;
+                            }
+                        }
+                    else 
+                        bottomLeft = false;
+                    if(xPosition+i < Columns & yPosition+i < Columns &
+                        bottomRight){
+                            if(CheckTileForPiece(xPosition + i, yPosition + i) == null)
+                                MarkBoardTile(GetBoardTile(xPosition + i, yPosition + i), true);
+                            if(CheckTileForPiece(xPosition + i, yPosition + i) != null){
+                                if(CheckTileForPiece(xPosition + i, yPosition + i).PieceColor != piece.PieceColor)
+                                    MarkBoardTile(GetBoardTile(xPosition + i, yPosition + i), true);
+                                bottomRight = false;
+                            }
+                        }
+                    else
+                        bottomRight = false;
+                }
+            break;
+            case PieceTypes.King:
+                // top left
+                if(CheckTileForPiece(xPosition-1 , yPosition-1) == null)
+                    MarkBoardTile(GetBoardTile(xPosition-1, yPosition-1), true);
+                if(CheckTileForPiece(xPosition-1, yPosition-1) != null)
+                    if(CheckTileForPiece(xPosition-1, yPosition-1).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition-1, yPosition-1), true);
+                // top 
+                if(CheckTileForPiece(xPosition , yPosition-1) == null)
+                    MarkBoardTile(GetBoardTile(xPosition, yPosition-1), true);
+                if(CheckTileForPiece(xPosition, yPosition-1) != null)
+                    if(CheckTileForPiece(xPosition, yPosition-1).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition, yPosition-1), true);
+                // top right
+                if(CheckTileForPiece(xPosition+1 , yPosition-1) == null)
+                    MarkBoardTile(GetBoardTile(xPosition+1, yPosition-1), true);
+                if(CheckTileForPiece(xPosition+1, yPosition-1) != null)
+                    if(CheckTileForPiece(xPosition+1, yPosition-1).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition+1, yPosition-1), true);
+                // left
+                if(CheckTileForPiece(xPosition-1 , yPosition) == null)
+                    MarkBoardTile(GetBoardTile(xPosition-1, yPosition), true);
+                if(CheckTileForPiece(xPosition-1, yPosition) != null)
+                    if(CheckTileForPiece(xPosition-1, yPosition).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition-1, yPosition), true);
+                // right
+                if(CheckTileForPiece(xPosition+1 , yPosition) == null)
+                    MarkBoardTile(GetBoardTile(xPosition+1, yPosition), true);
+                if(CheckTileForPiece(xPosition+1, yPosition) != null)
+                    if(CheckTileForPiece(xPosition+1, yPosition).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition+1, yPosition), true);
+                // bottom left
+                if(CheckTileForPiece(xPosition-1 , yPosition+1) == null)
+                    MarkBoardTile(GetBoardTile(xPosition-1, yPosition+1), true);
+                if(CheckTileForPiece(xPosition-1, yPosition+1) != null)
+                    if(CheckTileForPiece(xPosition-1, yPosition+1).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition-1, yPosition+1), true);
+                // bottom
+                if(CheckTileForPiece(xPosition , yPosition+1) == null)
+                    MarkBoardTile(GetBoardTile(xPosition, yPosition+1), true);
+                if(CheckTileForPiece(xPosition, yPosition+1) != null)
+                    if(CheckTileForPiece(xPosition, yPosition+1).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition, yPosition+1), true);
+                // bottom right
+                if(CheckTileForPiece(xPosition+1 , yPosition+1) == null)
+                    MarkBoardTile(GetBoardTile(xPosition+1, yPosition+1), true);
+                if(CheckTileForPiece(xPosition+1, yPosition+1) != null)
+                    if(CheckTileForPiece(xPosition+1, yPosition+1).PieceColor != piece.PieceColor)
+                        MarkBoardTile(GetBoardTile(xPosition+1, yPosition+1), true);
             break;
         }
-        
     }
     private void MarkBoardTile(BoardTile markedTile, bool visible){
         if(markedTile != null){
