@@ -1,27 +1,12 @@
 To finish:
--shader/ modulate on for selected pieces
+-nothing rn
+
 To add:
--visuals for where pieces can go
-	-implement after movement limitation
--movement limitation
-	-limiting how far can each piece go depending on it's type
-		-pawn can move 1 tile forward
-		-king, 1 tile any direction
-		-queen, how far she can see
-	-block pieces from jump above them, ex.
-		rook can't jump past pieces even when can move there
-	-add "special" moves
-		-castling
-		-starting pawn 2-tile move
-		-en passant
-		-pawn promotion
-	-checkmate
-		-this is an entire diferent can of worms
-		will deal with this later
--tower defense element (none rn)
--title
+-tower defense element (only cash rn, doesn't even have function)
+-menu for pieces(right click and options show up)
+-title screen
+-different modes
+
 To change:
--ui elements to make them look better
--maybe board look
+-maybe add background showing which side turn it is
 -play around with default cursor shape in chess piece
--color saturation on pieces / pieces in general
