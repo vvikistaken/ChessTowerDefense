@@ -3,7 +3,7 @@ using System;
 
 public partial class GlobalVariables : Node
 {
-    public int PlayerCash = 0, EnemyCash = 0;
+    public int PlayerCash = 500, EnemyCash = 0;
     public enum ChessPieceTypes{
         Pawn,
 		Bishop,

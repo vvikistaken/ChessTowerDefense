@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using TileColors = GlobalVariables.ChessPieceColors;
 
 public partial class BoardTile : ColorRect
 {
@@ -14,23 +15,22 @@ public partial class BoardTile : ColorRect
         } 
     }
     private TileColors _tileColor;
-    public enum TileColors{
-        Light,
-        Dark 
-    }
     public int X, Y;
     
     private Color _darkTile = Color.FromHtml("#afc3dc"),
                  _lightTile = Color.FromHtml("#eceef0");
 
+    private GlobalVariables gVar;
     private TextureRect _marker;
 
     public override void _Ready()
     {
+        _marker = GetNode<TextureRect>("Marker");
+        gVar = GetNode<GlobalVariables>("/root/GlobalVariables");
+
         ChangeTileColor();
 
         GuiInput += MouseInputs;
-        _marker = GetNode<TextureRect>("Marker");
     }
     public override void _Process(double delta)
     {

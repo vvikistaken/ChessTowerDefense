@@ -20,6 +20,7 @@ public partial class UI : CanvasLayer
 	public override void _Process(double delta)
 	{
 		GetNode<Label>("TurnLabel").Text = "Current Turn:\n"+gVar.CurrentRound;
+		GetNode<Label>("CashVisual/CashLabel").Text = ""+ gVar.PlayerCash;
 	}
 	private async void OnGameEnd(GlobalVariables.ChessPieceColors winners){
 		GetNode<Label>("EndScreen/EndLabel").Text = winners + " won";

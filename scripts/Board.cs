@@ -2,6 +2,7 @@ using Godot;
 using System;
 using PieceTypes = GlobalVariables.ChessPieceTypes;
 using PieceColors = GlobalVariables.ChessPieceColors;
+using TileColors = GlobalVariables.ChessPieceColors;
 using System.Collections;
 
 public partial class Board : GridContainer
@@ -61,15 +62,15 @@ public partial class Board : GridContainer
 
         if((tileId / 8) % 2 == 1 ){ 
             if(tileId % 2 == 1)
-                boardTile.TileColor = BoardTile.TileColors.Dark; 
+                boardTile.TileColor = TileColors.Dark; 
             else
-                boardTile.TileColor = BoardTile.TileColors.Light; 
+                boardTile.TileColor = TileColors.Light; 
         }
         else{
             if(tileId % 2 == 1)
-                boardTile.TileColor = BoardTile.TileColors.Light; 
+                boardTile.TileColor = TileColors.Light; 
             else
-                boardTile.TileColor = BoardTile.TileColors.Dark; 
+                boardTile.TileColor = TileColors.Dark; 
 
         }
     }
@@ -311,6 +312,7 @@ public partial class Board : GridContainer
                         if(CheckTileForPiece(xPosition, yPosition-1) == null)
                             MarkBoardTile(GetBoardTile(xPosition, yPosition-1), true);
                         if(CheckTileForPiece(xPosition, yPosition-2) == null &
+                            CheckTileForPiece(xPosition, yPosition-1) == null &
                             piece.FirstMove)
                             MarkBoardTile(GetBoardTile(xPosition, yPosition-2), true);
                     break;
@@ -326,6 +328,7 @@ public partial class Board : GridContainer
                         if(CheckTileForPiece(xPosition, yPosition+1) == null)
                             MarkBoardTile(GetBoardTile(xPosition, yPosition+1), true);
                         if(CheckTileForPiece(xPosition, yPosition+2) == null &
+                            CheckTileForPiece(xPosition, yPosition+1) == null &
                             piece.FirstMove)
                             MarkBoardTile(GetBoardTile(xPosition, yPosition+2), true);
                     break;

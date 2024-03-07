@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3jprxlemjq67"]
+
+[sub_resource type="Gradient" id="Gradient_06q3j"]
+colors = PackedColorArray(0.92549, 0.933333, 0.941176, 1, 0.686275, 0.764706, 0.862745, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_uexei"]
+gradient = SubResource("Gradient_06q3j")
+width = 8
+height = 4
+fill_from = Vector2(1, 1)
+fill_to = Vector2(0.97561, 0)
+
+[node name="Background" type="CanvasLayer"]
+layer = -1
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_uexei")
