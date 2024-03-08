@@ -1,12 +1,20 @@
-To finish:
--nothing rn
+To finish/fix:
+-E 0:00:10:0500   can_process: Condition "!is_inside_tree()" is true. Returning: false
+  <C++ Source>   scene/main/node.cpp:762 @ can_process()
+    -don't know why this pops up
+        -it only happens when InputEventScreenTouch
+    -happens when taking pieces
+    -it started to happen when i changed some stuff in OnPieceClicked
 
 To add:
--tower defense element (only cash rn, doesn't even have function)
--menu for pieces(right click and options show up)
+-tower defense element 
+    -only cash is a td element rn(it doesn't even have function yet)
+    -menu for pieces(right click and options show up)
 -title screen
--different modes
+    -different modes
+    -settings menu
 
 To change:
+-make (???, i just didnt finish writing here)
 -maybe add background showing which side turn it is
 -play around with default cursor shape in chess piece
