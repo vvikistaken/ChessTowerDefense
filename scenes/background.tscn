@@ -1,14 +1,50 @@
-[gd_scene load_steps=3 format=3 uid="uid://b3jprxlemjq67"]
+[gd_scene load_steps=6 format=3 uid="uid://b3jprxlemjq67"]
 
 [sub_resource type="Gradient" id="Gradient_06q3j"]
 colors = PackedColorArray(0.92549, 0.933333, 0.941176, 1, 0.686275, 0.764706, 0.862745, 1)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_uexei"]
 gradient = SubResource("Gradient_06q3j")
-width = 8
-height = 4
-fill_from = Vector2(1, 1)
-fill_to = Vector2(0.97561, 0)
+width = 16
+height = 16
+fill_from = Vector2(1, 0.75)
+
+[sub_resource type="Animation" id="Animation_y66nd"]
+resource_name = "backgroundAnimation"
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(2, 2)]
+}
+
+[sub_resource type="Animation" id="Animation_clgat"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("TextureRect:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_sraw7"]
+_data = {
+"RESET": SubResource("Animation_clgat"),
+"backgroundAnimation": SubResource("Animation_y66nd")
+}
 
 [node name="Background" type="CanvasLayer"]
 layer = -1
