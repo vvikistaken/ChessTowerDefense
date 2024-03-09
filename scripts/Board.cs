@@ -39,13 +39,16 @@ public partial class Board : GridContainer
     }
     public override void _Process(double delta)
     {
-        if(gVar.LastPieceClicked != null && gVar.LastTileClicked != null)
+        if(gVar.LastPieceClicked != null && gVar.LastTileClicked != null){
             if(CheckMove()){
                 MovePiece(gVar.LastTileClicked, gVar.LastPieceClicked);
                 ClearMarkers();
             }
-            else
-                gVar.LastTileClicked = null;
+        }
+        else
+            gVar.LastTileClicked = null;
+        
+        
                 
     }
     // for the board tiles creation
@@ -82,7 +85,8 @@ public partial class Board : GridContainer
 
         chessPiece.FirstMove = isNew;
 
-        chessPiece.ChessPieceClicked += OnChessPieceClicked;
+        chessPiece.MoveChessPiece += OnMoveChessPieceEvent;
+        chessPiece.InspectChessPiece += OnInspectChessPieceEvent;
 
         chessPiece.PieceType = pieceType;
         chessPiece.PieceColor = pieceColor;
@@ -201,7 +205,7 @@ public partial class Board : GridContainer
             return false;
             case PieceTypes.Bishop:
                 if(Math.Abs(xDistance) == Math.Abs(yDistance)){
-                    // can use x or y, which doesn't even matter
+                    // can use x or y, which one doesn't even matter
                     for(int i=1; i < Math.Abs(xDistance); i++){
                         if(CheckTileForPiece(
                             curPiecePos.X + (xDistance > 0 ? i : -i),
@@ -209,6 +213,7 @@ public partial class Board : GridContainer
                         )
                             return false;
                     }
+                    if(curPiecePos != toMoveTile)
                     return true;
                 }
             return false;
@@ -263,7 +268,7 @@ public partial class Board : GridContainer
                     return true;
                 }
                 if(Math.Abs(xDistance) == Math.Abs(yDistance)){
-                    // can use x or y, which doesn't matter here
+                    // can use x or y, which one doesn't matter here
                     for(int i=1; i < Math.Abs(xDistance); i++){
                         if(CheckTileForPiece(
                             curPiecePos.X + (xDistance > 0 ? i : -i),
@@ -271,14 +276,17 @@ public partial class Board : GridContainer
                         )
                             return false;
                     }
-                    return true;
+                    if(curPiecePos != toMoveTile)
+                        return true;
                 }
             return false;
             case PieceTypes.King:
                 if( Math.Abs(xDistance) <= 1 && Math.Abs(xDistance) >= 0 &&
                     Math.Abs(yDistance) <= 1 && Math.Abs(yDistance) >= 0 )
-                    return true;
+                        if(curPiecePos != toMoveTile)
+                            return true;
             return false;
+
             default:
             return true;
         }
@@ -653,15 +661,27 @@ public partial class Board : GridContainer
             MarkBoardTile(GetBoardTile(i%8, i/8), false);
         }
     }
-    // again, self explanatory
-    private void OnChessPieceClicked(ChessPiece chessPiece){
-        MarkBoardTiles(chessPiece);
+    // signal from chess piece to move piece
+    private void OnMoveChessPieceEvent(ChessPiece chessPiece){
+        ClearMarkers();
 
-        if(gVar.LastPieceClicked is null)
+        if(gVar.LastPieceClicked is null || gVar.LastPieceClicked != chessPiece){
+            gVar.LastPieceClicked = chessPiece;
+            MarkBoardTiles(chessPiece);
+        }
+        else
+            gVar.LastPieceClicked = null;
+
+        gVar.LastTileClicked = null;
+    }
+    // signal from chess piece, show a menu for piece
+    private void OnInspectChessPieceEvent(ChessPiece chessPiece){
+        ClearMarkers();
+
+        if(gVar.LastPieceClicked is null || gVar.LastPieceClicked != chessPiece)
             gVar.LastPieceClicked = chessPiece;
         else{
             gVar.LastPieceClicked = null;
-            ClearMarkers();
         }
 
         gVar.LastTileClicked = null;

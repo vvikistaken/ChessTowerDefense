@@ -5,11 +5,12 @@ using PieceColors = GlobalVariables.ChessPieceColors;
 public partial class ChessPiece : Node2D
 {
 	[Signal]
-	public delegate void ChessPieceClickedEventHandler(ChessPiece chessPiece);
-	// for get/set
+	public delegate void MoveChessPieceEventHandler(ChessPiece chessPiece);
+	[Signal]
+	public delegate void InspectChessPieceEventHandler(ChessPiece chessPiece);
 	private PieceTypes _pieceType;
 	private PieceColors _pieceColor;
-	private bool _moveState;
+	private bool _moveState = false;
 	[Export]
 	public PieceTypes PieceType { 
 		get{ return _pieceType; }
@@ -26,11 +27,11 @@ public partial class ChessPiece : Node2D
 			SetPiece();
 		} 
 	}
-	private bool MoveState { 
-		get{
-			return _moveState;
-		}	 
-		set{
+	private bool MoveState
+	{
+		get { return _moveState; }
+		set 
+		{ 
 			_moveState = value;
 			Highlight(_moveState);
 		}
@@ -41,8 +42,6 @@ public partial class ChessPiece : Node2D
 	private GlobalVariables gVar;
 	private Control _clickBox;
 	private Sprite2D _pieceSprite;
-	
-	
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -61,27 +60,38 @@ public partial class ChessPiece : Node2D
 	{
 		_pieceSprite.Texture = GD.Load<Texture2D>("res://graphics/sprites/pieces/"+_pieceToLoad+".png");
 		
-		if(gVar.LastPieceClicked != this)
+		if(gVar.LastPieceClicked != this){
 			MoveState = false;
+		}
+			
 	}
+	// DO NOT SWITCH TO _INPUT IT WILL FUCK IT UP
     private void MouseInputs(InputEvent @event)
     {
-		if( (@event is InputEventMouseButton) &&
-			 @event.IsPressed() && gVar.CurrentRound == PieceColor ){
-			GD.Print(@event);
-			/*
-			GD.Print("Color: "+PieceColor);
-			GD.Print("Type: "+PieceType);
-			GD.Print("------------------------------");
-			*/
+		if( @event is InputEventMouseButton & gVar.CurrentRound == PieceColor ){
 			_clickBox.MouseFilter = Control.MouseFilterEnum.Stop;
 
-			MoveState = !MoveState;
-			EmitSignal(SignalName.ChessPieceClicked, this);
+			if(Input.IsActionJustPressed("left_click")){
+				GD.Print("left click works!");
+				/*
+				GD.Print("Color: "+PieceColor);
+				GD.Print("Type: "+PieceType);
+				GD.Print("------------------------------");
+				*/
+				MoveState = !MoveState;
+				
+				EmitSignal(SignalName.MoveChessPiece, this);
+			}
+			if(Input.IsActionJustPressed("right_click")){
+				GD.Print("right click works!");
+
+				Highlight(true);
+
+				EmitSignal(SignalName.InspectChessPiece, this);
+			}
 		}
 		else{
 			_clickBox.MouseFilter = Control.MouseFilterEnum.Pass;
-
 		}
     }
     private void SetPiece(){
@@ -101,8 +111,14 @@ public partial class ChessPiece : Node2D
 	private void Highlight(bool isInverted){
 		// shader doesnt work for some reason
 		//((ShaderMaterial)_pieceSprite.Material).SetShaderParameter("Invert", isInverted);
-		if(isInverted)
-			_pieceSprite.Modulate = _pieceSprite.Modulate.Inverted();
+		if(isInverted){
+			if(PieceColor == PieceColors.Light)
+				_pieceSprite.Modulate = Color.FromHtml("#7ff");
+			if(PieceColor == PieceColors.Dark)
+				_pieceSprite.Modulate = Color.FromHtml("#f77");
+		}
+			//_pieceSprite.Modulate = _pieceSprite.Modulate.Inverted();
+			
 		else
 			_pieceSprite.Modulate = Color.FromHtml("#fff");
 		//GD.Print("Highlight works");

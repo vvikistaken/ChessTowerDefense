@@ -5,6 +5,7 @@ public partial class UI : CanvasLayer
 {
 	private GlobalVariables gVar;
 	private Board _board;
+	private ChessPiece _chessPiece;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{

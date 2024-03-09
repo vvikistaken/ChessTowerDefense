@@ -1,8 +1,69 @@
-[gd_scene load_steps=4 format=3 uid="uid://cyo6e728myvjm"]
+[gd_scene load_steps=7 format=3 uid="uid://cyo6e728myvjm"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_s4o8c"]
 [ext_resource type="Texture2D" uid="uid://cyed67dim25j3" path="res://graphics/sprites/coin.png" id="2_3l4ey"]
 [ext_resource type="PackedScene" uid="uid://d0oqgjydruq34" path="res://scenes/background.tscn" id="2_hu2f1"]
+
+[sub_resource type="Animation" id="Animation_yn40t"]
+resource_name = "chessPieceInfoSlide"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PieceInfo:anchor_left")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.55, 0.55]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PieceInfo:anchor_right")
+tracks/1/interp = 2
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.95, 0.95]
+}
+
+[sub_resource type="Animation" id="Animation_681pk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PieceInfo:anchor_left")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PieceInfo:anchor_right")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.95]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0awxw"]
+_data = {
+"RESET": SubResource("Animation_681pk"),
+"chessPieceInfoSlide": SubResource("Animation_yn40t")
+}
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_s4o8c")
@@ -95,3 +156,62 @@ theme_override_font_sizes/font_size = 32
 text = "Retry"
 
 [node name="Background" parent="." instance=ExtResource("2_hu2f1")]
+
+[node name="PieceInfo" type="Control" parent="."]
+layout_mode = 3
+anchor_left = 1.5
+anchor_top = 0.15
+anchor_right = 1.95
+anchor_bottom = 0.95
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_group_ = true
+
+[node name="Panel" type="Panel" parent="PieceInfo"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TypeLabel" type="Label" parent="PieceInfo"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -88.0
+offset_right = 64.0
+offset_bottom = -23.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Piece Type:
+TBA"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorLabel" type="Label" parent="PieceInfo"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -160.0
+offset_right = 64.0
+offset_bottom = -96.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Piece Color:
+TBA"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_0awxw")
+}
