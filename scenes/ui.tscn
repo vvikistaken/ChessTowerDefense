@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_s4o8c"]
 [ext_resource type="Texture2D" uid="uid://cyed67dim25j3" path="res://graphics/sprites/coin.png" id="2_3l4ey"]
-[ext_resource type="PackedScene" uid="uid://b3jprxlemjq67" path="res://scenes/background.tscn" id="2_hu2f1"]
+[ext_resource type="PackedScene" uid="uid://d0oqgjydruq34" path="res://scenes/background.tscn" id="2_hu2f1"]
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_s4o8c")
