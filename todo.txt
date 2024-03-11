@@ -1,18 +1,21 @@
 To finish/fix:
 -E 0:00:10:0500   can_process: Condition "!is_inside_tree()" is true. Returning: false
   <C++ Source>   scene/main/node.cpp:762 @ can_process()
-    -don't know why this pops up
-        -it only happens when InputEventScreenTouch
-    -happens when taking pieces
-    -it started to happen when i changed some stuff in OnPieceClicked
+	-don't know why this pops up
+		-it only happens when InputEventScreenTouch
+	-happens when taking pieces
+	-it started to happen when i changed some stuff in OnPieceClicked
+-signal shenanigans
+	-probably i need to figure out event bus
+	-also thats the reason why nothing works rn
 
 To add:
 -tower defense element 
-    -only cash is a td element rn(it doesn't even have function yet)
-    -menu for pieces(right click and options show up)
+	-only cash is a td element rn(it doesn't even have function yet)
+	-menu for pieces(right click and options show up)
 -title screen
-    -different modes
-    -settings menu
+	-different modes
+	-settings menu
 
 To change:
 -make (???, i just didnt finish writing here)
