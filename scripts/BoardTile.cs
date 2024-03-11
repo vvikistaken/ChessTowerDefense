@@ -32,20 +32,19 @@ public partial class BoardTile : ColorRect
 
         GuiInput += MouseInputs;
     }
+    private void MouseInputs(InputEvent @event)
+    {
+		if( Input.IsActionJustPressed("left_click") ){
+            GD.Print(this.Name+" - X: "+X+", Y: "+Y);
+            EmitSignal(SignalName.BoardTileClicked, this);
+		}
+    }
     public override void _Process(double delta)
     {
         GetNode<Label>("TileId").Text = Name + "\nx:"+X+"|y:"+Y;
     }
     public void MarkerVisibility(bool visible){
         _marker.Visible = visible;
-    }
-    private void MouseInputs(InputEvent @event)
-    {
-		if( @event is InputEventMouseButton &&
-			 @event.IsPressed() ){
-            GD.Print(this.Name+" - X: "+X+", Y: "+Y);
-            EmitSignal(SignalName.BoardTileClicked, this);
-		}
     }
     private void ChangeTileColor(){
         this.Color = TileColor == TileColors.Dark ? _darkTile : _lightTile;

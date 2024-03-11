@@ -8,6 +8,9 @@ To finish/fix:
 -signal shenanigans
 	-probably i need to figure out event bus
 	-also thats the reason why nothing works rn
+-change so it doesn't refresh scene, just set it up back to start
+	-cuz it kinda breaks right click ui
+-bishop doesnt want to move when next to the wall
 
 To add:
 -tower defense element 

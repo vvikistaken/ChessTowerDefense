@@ -44,9 +44,11 @@ public partial class Board : GridContainer
                 MovePiece(gVar.LastTileClicked, gVar.LastPieceClicked);
                 ClearMarkers();
             }
+            else{
+                gVar.LastTileClicked = null;
+                gVar.LastPieceClicked = null;
+            }
         }
-        else
-            gVar.LastTileClicked = null;
     }
     // for the board tiles creation
     private void CreateBoardTile(int tileId){

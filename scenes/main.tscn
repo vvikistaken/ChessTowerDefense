@@ -5,8 +5,6 @@
 
 [node name="Main" type="Node"]
 
-[node name="UI" parent="." instance=ExtResource("1_x2r32")]
-
 [node name="Board" parent="." instance=ExtResource("2_3tckn")]
 anchors_preset = 8
 anchor_left = 0.5
@@ -17,3 +15,5 @@ offset_left = -256.0
 offset_top = -240.0
 offset_right = 256.0
 offset_bottom = 272.0
+
+[node name="UI" parent="." instance=ExtResource("1_x2r32")]
