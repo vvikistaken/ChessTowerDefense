@@ -3,6 +3,8 @@ using System;
 
 public partial class GlobalVariables : Node
 {
+    [Signal]
+    public delegate void InspectChessPieceUIEventHandler(ChessPiece chessPiece, bool IsOpening);
     public int PlayerCash = 500, EnemyCash = 0;
     public enum ChessPieceTypes{
         Pawn,

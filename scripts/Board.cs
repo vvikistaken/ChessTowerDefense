@@ -47,9 +47,6 @@ public partial class Board : GridContainer
         }
         else
             gVar.LastTileClicked = null;
-        
-        
-                
     }
     // for the board tiles creation
     private void CreateBoardTile(int tileId){
@@ -85,8 +82,8 @@ public partial class Board : GridContainer
 
         chessPiece.FirstMove = isNew;
 
-        chessPiece.MoveChessPiece += OnMoveChessPieceEvent;
-        chessPiece.InspectChessPiece += OnInspectChessPieceEvent;
+        chessPiece.MoveChessPiece += OnMoveChessPiece;
+        chessPiece.InspectChessPiece += OnInspectChessPiece;
 
         chessPiece.PieceType = pieceType;
         chessPiece.PieceColor = pieceColor;
@@ -662,7 +659,7 @@ public partial class Board : GridContainer
         }
     }
     // signal from chess piece to move piece
-    private void OnMoveChessPieceEvent(ChessPiece chessPiece){
+    private void OnMoveChessPiece(ChessPiece chessPiece){
         ClearMarkers();
 
         if(gVar.LastPieceClicked is null || gVar.LastPieceClicked != chessPiece){
@@ -675,7 +672,7 @@ public partial class Board : GridContainer
         gVar.LastTileClicked = null;
     }
     // signal from chess piece, show a menu for piece
-    private void OnInspectChessPieceEvent(ChessPiece chessPiece){
+    private void OnInspectChessPiece(ChessPiece chessPiece){
         ClearMarkers();
 
         if(gVar.LastPieceClicked is null || gVar.LastPieceClicked != chessPiece)
