@@ -1,6 +1,7 @@
 using Godot;
 using PieceTypes = GlobalVariables.ChessPieceTypes;
 using PieceColors = GlobalVariables.ChessPieceColors;
+using System.Linq.Expressions;
 
 public partial class ChessPiece : Node2D
 {
@@ -72,7 +73,7 @@ public partial class ChessPiece : Node2D
 			_clickBox.MouseFilter = Control.MouseFilterEnum.Stop;
 
 			if(Input.IsActionJustPressed("left_click")){
-				GD.Print("left click works!");
+				//GD.Print("left click works!");
 				/*
 				GD.Print("Color: "+PieceColor);
 				GD.Print("Type: "+PieceType);
@@ -83,11 +84,16 @@ public partial class ChessPiece : Node2D
 				EmitSignal(SignalName.MoveChessPiece, this);
 			}
 			if(Input.IsActionJustPressed("right_click")){
-				GD.Print("right click works!");
-
-				Highlight(true);
+				//GD.Print("right click works!");
+				Highlight(!IsHighlighed());
 
 				EmitSignal(SignalName.InspectChessPiece, this);
+				if(gVar.LastPieceClicked != this)
+					// opening
+					gVar.EmitSignal(GlobalVariables.SignalName.InspectChessPieceUI, this, true);
+				else
+					// closing
+					gVar.EmitSignal(GlobalVariables.SignalName.InspectChessPieceUI, this, false);
 			}
 		}
 		else{
@@ -122,6 +128,12 @@ public partial class ChessPiece : Node2D
 		else
 			_pieceSprite.Modulate = Color.FromHtml("#fff");
 		//GD.Print("Highlight works");
+	}
+	private bool IsHighlighed(){
+		if(_pieceSprite.Modulate == Color.FromHtml("#7ff") | _pieceSprite.Modulate == Color.FromHtml("#f77"))
+			return true;
+		else
+			return false;
 	}
 
 }
