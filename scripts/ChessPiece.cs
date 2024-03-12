@@ -64,9 +64,15 @@ public partial class ChessPiece : Node2D
 		if(gVar.LastPieceClicked != this){
 			MoveState = false;
 		}
-			
 	}
-	// DO NOT SWITCH TO _INPUT IT WILL FUCK IT UP
+    public override void _Input(InputEvent @event)
+    {
+        if((Input.IsActionJustPressed("left_click") |
+		   Input.IsActionJustPressed("right_click")))
+			Highlight(false);
+    }
+    // DO NOT PUT IT TO _INPUT IT WILL FUCK IT UP
+
     private void MouseInputs(InputEvent @event)
     {
 		if( @event is InputEventMouseButton & gVar.CurrentRound == PieceColor ){

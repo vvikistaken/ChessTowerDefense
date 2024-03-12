@@ -1,8 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://cyo6e728myvjm"]
+[gd_scene load_steps=8 format=3 uid="uid://cyo6e728myvjm"]
 
 [ext_resource type="Script" path="res://scripts/UI.cs" id="1_s4o8c"]
 [ext_resource type="Texture2D" uid="uid://cyed67dim25j3" path="res://graphics/sprites/coin.png" id="2_3l4ey"]
 [ext_resource type="PackedScene" uid="uid://b3jprxlemjq67" path="res://scenes/background.tscn" id="2_hu2f1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7rbld"]
+bg_color = Color(0.686275, 0.764706, 0.862745, 0.498039)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.92549, 0.933333, 0.941176, 1)
+corner_radius_top_left = 25
+corner_radius_bottom_right = 25
 
 [sub_resource type="Animation" id="Animation_681pk"]
 length = 0.001
@@ -169,12 +179,14 @@ mouse_filter = 2
 metadata/_edit_group_ = true
 
 [node name="Panel" type="Panel" parent="PieceInfo"]
+show_behind_parent = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7rbld")
 
 [node name="TypeLabel" type="Label" parent="PieceInfo"]
 layout_mode = 1
@@ -211,6 +223,11 @@ text = "Piece Color:
 TBA"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="PieceInfo"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

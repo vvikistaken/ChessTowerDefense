@@ -49,6 +49,8 @@ public partial class Board : GridContainer
                 gVar.LastPieceClicked = null;
             }
         }
+        if(gVar.LastPieceClicked == null)
+            ClearMarkers();
     }
     // for the board tiles creation
     private void CreateBoardTile(int tileId){
