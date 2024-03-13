@@ -28,7 +28,7 @@ public partial class ChessPiece : Node2D
 			SetPiece();
 		} 
 	}
-	private bool MoveState
+	public bool MoveState
 	{
 		get { return _moveState; }
 		set 
@@ -38,8 +38,8 @@ public partial class ChessPiece : Node2D
 		}
 	}
 	public bool FirstMove = true;
-	private string _pieceToLoad;
-
+	public string PieceTextureName;
+	private bool CanRemoveHighlight = true;
 	private GlobalVariables gVar;
 	private Control _clickBox;
 	private Sprite2D _pieceSprite;
@@ -59,7 +59,7 @@ public partial class ChessPiece : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		_pieceSprite.Texture = GD.Load<Texture2D>("res://graphics/sprites/pieces/"+_pieceToLoad+".png");
+		_pieceSprite.Texture = GD.Load<Texture2D>($"res://graphics/sprites/pieces/{PieceTextureName}.png");
 		
 		if(gVar.LastPieceClicked != this){
 			MoveState = false;
@@ -68,16 +68,25 @@ public partial class ChessPiece : Node2D
     public override void _Input(InputEvent @event)
     {
         if((Input.IsActionJustPressed("left_click") |
-		   Input.IsActionJustPressed("right_click")))
-			Highlight(false);
+		   Input.IsActionJustPressed("right_click") &
+		   CanRemoveHighlight)
+		){
+			//Highlight(false);
+		}
     }
+	public bool IsHighlighed(){
+		if(_pieceSprite.Modulate == Color.FromHtml("#7ff") | _pieceSprite.Modulate == Color.FromHtml("#f77"))
+			return true;
+		else
+			return false;
+	}
     // DO NOT PUT IT TO _INPUT IT WILL FUCK IT UP
-
     private void MouseInputs(InputEvent @event)
     {
 		if( @event is InputEventMouseButton & gVar.CurrentRound == PieceColor ){
 			_clickBox.MouseFilter = Control.MouseFilterEnum.Stop;
 
+			
 			if(Input.IsActionJustPressed("left_click")){
 				//GD.Print("left click works!");
 				/*
@@ -86,20 +95,20 @@ public partial class ChessPiece : Node2D
 				GD.Print("------------------------------");
 				*/
 				MoveState = !MoveState;
+				CanRemoveHighlight = false;
 				
 				EmitSignal(SignalName.MoveChessPiece, this);
 			}
 			if(Input.IsActionJustPressed("right_click")){
 				//GD.Print("right click works!");
+				CanRemoveHighlight = false;
+				
+				// opening | closing
+				gVar.EmitSignal(GlobalVariables.SignalName.InspectChessPieceUI, this, !IsHighlighed());
 				Highlight(!IsHighlighed());
+				GD.Print("is highlighted: "+IsHighlighed());
 
 				EmitSignal(SignalName.InspectChessPiece, this);
-				if(gVar.LastPieceClicked != this)
-					// opening
-					gVar.EmitSignal(GlobalVariables.SignalName.InspectChessPieceUI, this, true);
-				else
-					// closing
-					gVar.EmitSignal(GlobalVariables.SignalName.InspectChessPieceUI, this, false);
 			}
 		}
 		else{
@@ -107,17 +116,17 @@ public partial class ChessPiece : Node2D
 		}
     }
     private void SetPiece(){
-		_pieceToLoad = "";
+		PieceTextureName = "";
 		switch(PieceColor){
 			case PieceColors.Light:
-				_pieceToLoad += "white";
+				PieceTextureName += "white";
 			break;
 			case PieceColors.Dark:
-				_pieceToLoad += "black";
+				PieceTextureName += "black";
 			break;
 		}
 
-		_pieceToLoad += "Piece" + ((int)PieceType+1);
+		PieceTextureName += "Piece" + ((int)PieceType+1);
 		//GD.Print(_pieceToLoad);
 	}
 	private void Highlight(bool isInverted){
@@ -134,12 +143,6 @@ public partial class ChessPiece : Node2D
 		else
 			_pieceSprite.Modulate = Color.FromHtml("#fff");
 		//GD.Print("Highlight works");
-	}
-	private bool IsHighlighed(){
-		if(_pieceSprite.Modulate == Color.FromHtml("#7ff") | _pieceSprite.Modulate == Color.FromHtml("#f77"))
-			return true;
-		else
-			return false;
 	}
 
 }

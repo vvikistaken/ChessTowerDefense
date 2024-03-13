@@ -5,12 +5,13 @@ To finish/fix:
 		-it only happens when InputEventScreenTouch
 	-happens when taking pieces
 	-it started to happen when i changed some stuff in OnPieceClicked
--signal shenanigans
-	-probably i need to figure out event bus
-	-also thats the reason why nothing works rn
 -change so it doesn't refresh scene, just set it up back to start
 	-cuz it kinda breaks right click ui
 -bishop doesnt want to move when next to the wall
+	-not replicable tho
+-work around with the right click menu
+	-i don't quite like it yet
+	-sometimes it just doesn't work
 
 To add:
 -tower defense element 

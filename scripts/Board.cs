@@ -40,14 +40,14 @@ public partial class Board : GridContainer
     public override void _Process(double delta)
     {
         if(gVar.LastPieceClicked != null && gVar.LastTileClicked != null){
-            if(CheckMove()){
+            if(CheckMove() & gVar.LastPieceClicked.MoveState){
                 MovePiece(gVar.LastTileClicked, gVar.LastPieceClicked);
-                ClearMarkers();
             }
             else{
                 gVar.LastTileClicked = null;
                 gVar.LastPieceClicked = null;
             }
+            ClearMarkers();
         }
         if(gVar.LastPieceClicked == null)
             ClearMarkers();
